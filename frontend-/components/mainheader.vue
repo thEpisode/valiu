@@ -6,3 +6,16 @@
   color: #0c0148;
 }
 </style>
+
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+  data() {
+    return {
+      tagText: ""
+    };
+  },
+  methods: {}
+});
+</script>

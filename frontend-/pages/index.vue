@@ -22,9 +22,11 @@
 
 <script lang="ts">
 import Vue from "vue";
-import mainheader from "~/components/mainheader.vue";
-import taginput from "~/components/taginput";
-import itemlist from "~/components/itemlist";
+import mainheader from "~/components/MainHeader.vue";
+import taginput from "~/components/taginput.vue";
+import itemlist from "~/components/itemlist.vue";
+
+declare var io: any;
 
 export default Vue.extend({
   components: {
@@ -33,15 +35,11 @@ export default Vue.extend({
     itemlist
   },
   data() {
-    let tags: any[] = [];
-    const socketUri = "http://localhost:3500/";
-    let socket: any = {};
-
     return {
-      tags,
-      socketUri,
-      socket
-    };
+      tags: Array,
+      socketUri: "http://localhost:3500/",
+      socket: {}
+    } as any;
   },
   mounted() {
     this.initializeSocket();
@@ -53,7 +51,7 @@ export default Vue.extend({
         console.log("Socket Connected");
       });
       this.socket.on("valiu.api", (data: any) => {
-        console.log(data)
+        console.log(data);
         switch (data.command) {
           case "tag-create#request":
             this.addItemToList(data.values.tag);
@@ -103,7 +101,7 @@ export default Vue.extend({
       });
     },
     onRemoveItem(tag: any) {
-      console.log('remove action to ' + tag.id)
+      console.log("remove action to " + tag.id);
       this.socket.emit("valiu.client", {
         context: {
           channel: "ws",
@@ -118,10 +116,15 @@ export default Vue.extend({
       });
     },
     addItemToList(tag: any) {
+      this.tags = [] as any;
       this.tags.push(tag);
     },
     editItem(tag: any) {
-      Vue.set(this.tags, this.tags.findIndex(f => f.id === tag.id), tag)
+      Vue.set(
+        this.tags,
+        this.tags.findIndex((f: any) => f.id === tag.id),
+        tag
+      );
     },
     removeItem(tag: any) {
       this.findAndRemoveByKey(tag.id, "id", this.tags);
@@ -138,7 +141,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    tagsSorted: function() {
+    tagsSorted(): any {
       return this.tags.sort(
         (a: any, b: any) => b.dateCreation - a.dateCreation
       );
