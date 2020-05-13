@@ -36,7 +36,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      tags: Array,
+      tags: [],
       socketUri: "http://localhost:3500/",
       socket: {}
     } as any;
@@ -116,7 +116,6 @@ export default Vue.extend({
       });
     },
     addItemToList(tag: any) {
-      this.tags = [] as any;
       this.tags.push(tag);
     },
     editItem(tag: any) {
@@ -144,7 +143,7 @@ export default Vue.extend({
     tagsSorted(): any {
       return this.tags.sort(
         (a: any, b: any) => b.dateCreation - a.dateCreation
-      );
+      )
     }
   }
 });
